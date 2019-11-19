@@ -13,4 +13,74 @@ if($action == NULL){
         $action = 'main';
     }
 }
+
+$_SESSION['user'] = NULL;
+
+switch ($action) {
+    
+    case 'main':
+        include('./View/home.php');
+        
+        break;
+    
+    case 'login': 
+        include('./View/login.php');
+        break;
+    
+    case 'logout':
+        
+        break;
+    
+    case 'barn':
+        include('./View/barn.php');
+        break;
+    
+    case 'profile':
+        
+        break;
+    
+    case 'griffin':
+        
+        break;
+    
+    case 'breed':
+        
+        break;
+    
+    case 'pedigree':
+        
+        break;
+    
+    case 'feed':
+        
+        break;
+    
+    case 'train':
+        
+        break;
+    
+    case 'medicine':
+        
+        break;
+    
+    case 'pasture':
+        
+        break;
+    
+    case 'market':
+        
+        break;
+    
+    case 'newday':
+        
+        break;
+    
+    case 'admin':
+        
+        break;
+    
+    case 'buy':
+        
+        break;
+}
 ?>

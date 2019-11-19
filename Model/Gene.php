@@ -12,12 +12,14 @@
  * @author pioden
  */
 class Gene {
-    private $name, 
+    private $name,
+            $code,
             $tamenessValue, 
             $dominance;
     
-    public function __construct($name, $tamenessValue, $dominance) {
+    public function __construct($name, $code, $tamenessValue, $dominance) {
         $this->name = $name;
+        $this->code = $code;
         $this->tamenessValue = $tamenessValue;
         $this->dominance = $dominance;
     }
@@ -44,6 +46,15 @@ class Gene {
     public function setDominance($dominance) {
         $this->dominance = $dominance;
     }
+    function getCode() {
+        return $this->code;
+    }
+
+    function setCode($code) {
+        $this->code = $code;
+    }
+
+
 
 
 
