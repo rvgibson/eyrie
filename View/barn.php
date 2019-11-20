@@ -11,14 +11,17 @@ and open the template in the editor.
     </head>
     <body>
         <?php
+       include_once('./Model/DA/DAMethods.php');
+       include_once('./Model/Breeder.php');
        
-        
         foreach($griffinsList as $griff){
             ?><div>
                 <ul>
                 <li>Name: <?php echo $griff->getName();?></li>
                 <li>Age: <?php echo $griff->getAge();?> </li>
-                <li>Phenotype: <?php echo var_dump($griff->getGenome());?></li></ul>
+                <li>Phenotype: <?php echo implode(Breeder::punnet($griff->getGenome()));?></li>
+                <li>EncodeDump: <?php echo var_dump(DAMethods::genome_encode($griff->getGenome())); ?></li>
+                </ul>
             </div>
         <?php }
         ?>

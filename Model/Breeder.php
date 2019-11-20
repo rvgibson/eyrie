@@ -1,20 +1,9 @@
 <?php
-include('./Model/Genome.php');
+include_once('./Model/Genome.php');
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Breeder
- *
- * @author pioden
- */
 class Breeder {
     
-    public function breedPets ($mother, $father){
+    public static function breedPets ($mother, $father){
     $sex;
     $r = random_int(0, 100); 
     if($r >= 50)
@@ -39,25 +28,23 @@ class Breeder {
     return $baby;  
 }
     
-    public function punnet($genome){
-        
+    public static function punnet($genome){
         $phenotype = array();
-        $g = (array) $genome;
+        $g = array_values((array) $genome);
         
-        for ($i = 0; $i <=26; $i += 2){
-            if ($g[i]->getDominance() > $g[i+1]->getDominance()){
-                array_push($phenotype, g[i]);
-            } else if ($g[i]->getDominance() < $g[i+1]->getDominance()){
-                array_push($phenotype, $g[i+1]);
+        for ($i = 0; $i < count($g); $i += 2){
+            if ($g[$i]->getDominance() < $g[$i+1]->getDominance()){
+                array_push($phenotype, $g[$i]->getCode());
+            } else if ($g[$i]->getDominance() > $g[$i+1]->getDominance()){
+                array_push($phenotype, $g[$i+1]->getCode());
             } else {
-                    array_push($phenotype, ($g[i] . $g[i+1]));
+                    array_push($phenotype, ('(' . $g[$i]->getCode() . $g[$i+1]->getCode() . ')'));
             }   
-        }
-//        
-        
+        } 
+        return $phenotype;     
     }
 
-    public function imageBuilder($phenotype){
+    public static function imageBuilder($phenotype){
         
     }
     
@@ -83,17 +70,16 @@ class Breeder {
                     $g[$i+1] = $dad[$i+1];
                 }
             }  
-            
             $genome = new Genome($g[0], $g[1], $g[2], $g[3], $g[4], $g[5], $g[6], $g[7], $g[8], $g[9], $g[10], $g[11], $g[12], $g[13], $g[14], $g[15], $g[16], $g[17], $g[18], $g[19], $g[20], $g[21], $g[22], $g[23], $g[24], $g[25]);
             return $genome;
     }
     
-    public function calcHealth($genome){
+    public static function calcHealth($genome){
         $health;
         return $health;
     }
     
-    public function calcTameness($genome){
+    public static function calcTameness($genome){
         $tameness;
         return $tameness;
     }

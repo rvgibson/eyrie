@@ -19,24 +19,35 @@ $_SESSION['user'] = NULL;
 switch ($action) {
     
     case 'main':
-        include('./View/home.php');
         
+        include('./View/home.php');
         break;
     
-    case 'login': 
-        include('./View/login.php');
+    case 'goLogin':
+        if($_SESSION['user'] == NULL){
+        include('./View/login.php'); }
+        else {
+            include('./View/profile.php');
+        } 
+        break;
+    
+    case 'login':
+        
         break;
     
     case 'logout':
-        
+        $_SESSION['user'] = NULL;
+        include('./View/home.php');
         break;
     
     case 'barn':
+        //$userID = filter_input(INPUT_GET, 'user');
         $griffinsList = get_griffs_active(1);
         include('./View/barn.php');
         break;
     
     case 'profile':
+        $userID = filter_input(INPUT_GET, 'user');
         
         break;
     
@@ -45,6 +56,8 @@ switch ($action) {
         break;
     
     case 'breed':
+        $motherID = filter_input(INPUT_POST, 'motherID');
+        $fatherID = filter_input(INPUT_POST, 'fatherID');
         
         break;
     

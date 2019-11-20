@@ -35,4 +35,13 @@ class DAMethods {
         );
         return $genomeArray;
     }
+    
+    static function genome_encode($genome){
+       $genomeArray = (array) $genome;
+       $genomeCoded = "";
+       foreach($genomeArray as $genecode){
+           $genomeCoded .= $genecode->getCode();
+       }
+       return $genomeCoded;
+    }
 }

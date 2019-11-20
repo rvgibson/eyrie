@@ -33,7 +33,9 @@ class Pet {
             $con,
             $height,
             $weight;
-    public function __construct( $name, $sex, $mother, $father, $age, $breedTimer, $genome, $energy, $maxHealth, $health, $maxTameness, $tameness, $imagePath, $str, $agi, $int, $spd, $con, $height, $weight) {
+    
+    public function __construct($id, $name, $sex, $mother, $father, $age, $breedTimer, $genome, $energy, $maxHealth, $health, $maxTameness, $tameness, $imagePath, $str, $agi, $int, $spd, $con, $height, $weight) {
+        $this->id = $id;
         $this->name = $name;
         $this->sex = $sex;
         $this->mother = $mother;
