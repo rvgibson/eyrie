@@ -10,8 +10,8 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        <?php
-        // put your code here
-        ?>
+        <ul>
+            <li><a href="?action=barn">Barn</a></li>
+        </ul>
     </body>
 </html>

@@ -11,7 +11,16 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        // put your code here
+       
+        
+        foreach($griffinsList as $griff){
+            ?><div>
+                <ul>
+                <li>Name: <?php echo $griff->getName();?></li>
+                <li>Age: <?php echo $griff->getAge();?> </li>
+                <li>Phenotype: <?php echo var_dump($griff->getGenome());?></li></ul>
+            </div>
+        <?php }
         ?>
     </body>
 </html>

@@ -34,7 +34,7 @@ function get_user_by_id($id){
 
 function get_griffs_active($userid){
     global $db;
-    $query = 'SELECT * FROM griffins WHERE userid = :userid and status = active';
+    $query = "SELECT * FROM griffins WHERE userid = :userid and status = 'active'";
     $statement = $db->prepare($query);
     $statement->bindValue(':userid', $userid);
     $statement->execute();
@@ -43,7 +43,7 @@ function get_griffs_active($userid){
     
     
     foreach ($griffs as $griffin){
-       $genomeArray = DAMethods::genome_parse($griffin['genome']);
+       $genomeArray= DAMethods::genome_parse($griffin['genome']);
        $genome = get_genes($genomeArray);
        $barn[$griffin['id']] = new Pet(
                $griffin['name'],
@@ -82,24 +82,25 @@ function add_griff($griffin, $userid){
 }
 
 function get_genes($genomeArray){
-    $g = [];
+    $g = array();
     global $db;
     foreach ($genomeArray as $geneSearch){
       $query = 'SELECT * FROM genes WHERE gene = :gene AND allele = :allele';
       $statement = $db->prepare($query);
-      $statement->bindValues(':gene', $geneSearch[0]);
-      $statement->bindValues(':allele', $geneSearch[1]);
-      $genetics=$statement->fetchAll();
+      $statement->bindValue(':gene', $geneSearch[0]);
+      $statement->bindValue(':allele', $geneSearch[1]);
+      $statement->execute();
+      $genetics = $statement->fetchAll();
       $statement->closeCursor();
       
       foreach($genetics as $gene){
-          $gene['name'] = new Gene(
+                  $gene['id'] = new Gene(
                   $gene['name'] . ' - ' . $gene['gene'],
                   $gene['allele'],
                   $gene['tameness'],
                   $gene['weight']);
+          array_push($g, $gene['id']);
       }
-      array_push($g, $gene);
     }
     $genome = new Genome($g[0], $g[1], $g[2], $g[3], $g[4], $g[5], $g[6], $g[7], $g[8], $g[9], $g[10], $g[11], $g[12], $g[13], $g[14], $g[15], $g[16], $g[17], $g[18], $g[19], $g[20], $g[21], $g[22], $g[23], $g[24], $g[25]);
     return $genome; 
