@@ -58,7 +58,10 @@ switch ($action) {
     case 'breed':
         $motherID = filter_input(INPUT_POST, 'motherID');
         $fatherID = filter_input(INPUT_POST, 'fatherID');
-        
+        $mother = get_griff_by_id($motherID);
+        $father = get_griff_by_id($fatherID);
+        require_once('Model/Breeder.php');
+        $baby = Breeder::breedPets($mother, $father);
         break;
     
     case 'pedigree':

@@ -21,6 +21,7 @@ and open the template in the editor.
                 <li>Age: <?php echo $griff->getAge();?> </li>
                 <li>Phenotype: <?php echo implode(Breeder::punnet($griff->getGenome()));?></li>
                 <li>EncodeDump: <?php echo var_dump(DAMethods::genome_encode($griff->getGenome())); ?></li>
+               
                 </ul>
             </div>
         <?php }

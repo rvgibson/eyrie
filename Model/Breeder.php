@@ -34,19 +34,147 @@ class Breeder {
         
         for ($i = 0; $i < count($g); $i += 2){
             if ($g[$i]->getDominance() < $g[$i+1]->getDominance()){
-                array_push($phenotype, $g[$i]->getCode());
+                array_push($phenotype, $g[$i]->getName());
             } else if ($g[$i]->getDominance() > $g[$i+1]->getDominance()){
-                array_push($phenotype, $g[$i+1]->getCode());
+                array_push($phenotype, $g[$i+1]->getName());
             } else {
-                    array_push($phenotype, ('(' . $g[$i]->getCode() . $g[$i+1]->getCode() . ')'));
+                    if($g[$i]->getCode() === $g[$i+1]->getCode()) {
+                        array_push($phenotype, $g[$i]->getName());
+                    }
+                    else {
+                    array_push($phenotype, ( $g[$i]->getCode() . $g[$i+1]->getCode()));}
             }   
         } 
         return $phenotype;     
     }
 
     public static function imageBuilder($phenotype){
+        $folderPath = '../imagebuilder/coat_wild/build_wild/';
+        $color = $phenotype[0];
+        $eyes = $phenotype[1];
+        $ears = $phenotype[2];
+        $coat = $phenotype[3];
+        $pattern = $phenotype[4];
+        $marking = $phenotype [5];
+        $tail = $phenotype[6];
+        $skin = $phenotype[7];
+        $build = $phenotype[8];
+        $beak = $phenotype[9];
+        $feet = $phenotype[10];
+        $health = $phenotype[11];
+        $mutations = $phenotype[12];
+        $beakColor = 'Med';
         
-    }
+        
+        //$imgBaseLines = imagecreatefrompng($folderPath . 'WBaseLines.png');
+        //$imgEarLines = imagecreatefrompng($folderPath . 'WEars.png');
+        //$imgFeetLines = imagecreatefrompng($folderPath . 'WPaws.png');
+        //$imgBeakLines = imagecreatefrompng('./imagebuilder/beak/WBeak.png');
+        $imgColor = imagecreatefrompng('red.png');
+//        $imgPattern = $color . '/' . $pattern . '_' . $color. '.png';
+//        $imgMarking = $color . '/' . $marking . '_' . $color . '.png';
+//        $imgBeak = 'beak/W' . $beakColor . '.png';
+//        $imgEyes = 'eyes/' . $eyes;
+//        $imgFeet = $color . '/Foot' . $feet . '_' . $color . '.png';
+//        $imgEars = $color . '/Ear' .$ears . '_' . $color . '.png';
+//        $imgSkin = 'skin/' . $skin . '.png';
+//        $imgBaseShading = $folderPath . 'shading/Base.png';
+//        $imgFeetShading = $folderPath . 'shading/FeetPaws.png';
+//        $imgSkinShading = $folderPath . 'shading/Skin.png';
+//        $imgBeakShading = $folderPath . 'shading/BeakWild.png';
+//        $imgEarShading = $folderPath . 'shading/EarsWild.png';
+//        
+       
+        //codominance encoding
+        switch ($phenotype[0]){
+            case 'BW':
+                $color = 'storm';
+                break;
+            case 'WB':
+                $color = 'storm';
+                break; 
+            case 'GN':
+                $color = 'ash';
+                break;
+            case 'NG':
+                $color = 'ash';
+                break;
+            case 'HR':
+                $color = 'rose';
+                break;
+            case 'RH':
+                $color = 'rose';
+                break;
+            case 'JD':
+                $color = 'martin';
+                break;
+            case 'DJ':
+                $color = 'martin';
+                break;
+            default:
+                $color = $phenotype[0];
+                break;
+        }
+        
+        switch ($pattern){
+            
+        }
+        
+        switch ($marking){
+            
+        }
+        
+        switch ($coat){
+            
+        }
+        
+      //color specific elements
+        
+        //light 
+        if ($color === 'white' || $color === 'grey' || $color === 'champagne' || $color === 'rose'){
+           $beakColor = 'Light'; 
+           if($skin === 'black'){
+               $skin = 'grey';
+           }
+        }
+        //med 
+        else if ($color === 'storm' || $color === 'tawny' || $color === 'flame' || $color === 'wild' || $color === 'ash'){
+            $beakColor = 'Med';
+        }
+        //dark 
+        else{
+            $beakColor = 'Dark';
+        }
+        
+        
+        //create image
+      $cvs = imagecreatetruecolor(600, 600);
+      imagesavealpha($cvs, true);
+      
+      $trans_background = imagecolorallocatealpha($dest_image, 0, 0, 0, 127);
+
+            //fill the image with a transparent background
+            imagefill($cvs, 0, 0, $trans_background);
+//      imagecopyresized($cvs, $imgSkin, 0, 0, 0, 0, 600, 600, 2400, 2400);
+        imagecopy($cvs, $imgColor, 0, 0, 0, 0,  2400, 2400);
+//      imagecopyresized($cvs, $imgFeet, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgBeak, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//     imagecopyresized($cvs, $imgEars, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgEyes, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgPattern, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgMarking, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgSkinShading, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgBaseShading, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgFeetShading, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgBeakShading, 0, 0, 0, 0, 600, 600, 2400, 2400);
+//      imagecopyresized($cvs, $imgEarShading, 0, 0, 0, 0, 600, 600, 2400, 2400);
+      //imagecopyresized($cvs, $imgBaseLines, 0, 0, 0, 0, 600, 600, 2400, 2400);
+     // imagecopyresized($cvs, $imgEarLines, 0, 0, 0, 0, 600, 600, 2400, 2400);  
+      //imagecopyresized($cvs, $imgFeetLines, 0, 0, 0, 0, 600, 600, 2400, 2400);
+      //imagecopyresized($cvs, $imgBeakLines, 0, 0, 0, 0, 600, 600, 2400, 2400); 
+     
+      //
+     }
     
     public function genomeBuilder($m, $d){
             $mom = (array) $m;

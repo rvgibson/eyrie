@@ -129,7 +129,7 @@ function get_genes($genomeArray){
       
       foreach($genetics as $gene){
                   $gene['id'] = new Gene(
-                  $gene['name'] . ' - ' . $gene['gene'],
+                  $gene['name'],
                   $gene['allele'],
                   $gene['tameness'],
                   $gene['weight']);
