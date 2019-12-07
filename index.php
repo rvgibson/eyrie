@@ -41,8 +41,8 @@ switch ($action) {
         break;
     
     case 'barn':
-        //$userID = filter_input(INPUT_GET, 'user');
-        $griffinsList = get_griffs_active(1);
+        $userID = filter_input(INPUT_GET, 'utarget');
+        $griffinsList = get_griffs_active($userID);
         include('./View/barn.php');
         break;
     

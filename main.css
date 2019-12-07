@@ -1,10 +1,100 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+/*HEX CODES
+Straw #E1CE7A
+Very Pale Yellow #FBFFB9
+Peach-Orange #FDD692
+Light Red Ochre #EC7357
+Tuscan Red #754F44
+Licorice #160F0D
+Ivory #FEFFF2
+
+font-family: 'Rye', cursive;
+font-family: 'Cinzel Decorative', cursive;
+font-family: 'Trade Winds', cursive;
+font-family: 'Underdog', cursive;
+font-family: 'Oswald', sans-serif
 */
-/* 
-    Created on : Nov 19, 2019, 7:53:16 PM
-    Author     : pioden
-*/
+:root {
+    --straw: #E1CE7A;
+    --pale-yellow: #FBFFB9;
+    --peach-orange: #FDD692;
+    --light-red: #EC7357;
+    --tuscan-red: #754F44;
+    --licorice: #160F0D;
+    --ivory: #FEFFF2;
+    }
+    
+/***************************** BODY STYLING *********************************/
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--licorice);
+    background-color: var(--ivory);
+    font-family: sans-serif;
+}
+
+header {
+   //font-family: 'Cinzel Decorative', cursive;
+    font-family: 'Rye', cursive;
+    font-size: 2.5em;
+    //font-family: 'Trade Winds', cursive;
+}
+
+#textLogo {
+    border-radius: 50%;
+    height: 3.5em;
+    width: 3.5em;
+    border: 25px solid var(--tuscan-red);
+    background-color: var(--light-red);
+    color: var(--pale-yellow); 
+    float:left;
+    position: absolute;
+    top: 1%;
+    margin-left: 1%;
+    text-align: center;
+}
+
+#eyrieText {
+    margin-right: auto;
+    margin-left: auto;
+    vertical-align: middle;
+    margin-top: 1.15em;
+}
+
+section{
+    margin-left: 15%;
+    margin-top: 3%;
+    width: 70%;
+}
+
+/***************************** NAVIGATION ***********************************/
+nav{
+    font-family: 'Oswald', sans-serif;
+}
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: var(--light-red);
+  margin-top: 4.5em;
+  padding-left: 15%;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/********************************* BARN ***************************************/
+.barnGriffDisplay {
+    max-width: 18rem;
+}
+
+
 
