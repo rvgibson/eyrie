@@ -20,10 +20,17 @@ class Breeder {
     $con = (rand(min($mother->getCon(), $father->getCon()), max($mother->getCon(), $father->getCon())));
     $int = (rand(min($mother->getInt(), $father->getInt()), max($mother->getInt(), $father->getInt())));
     $babyGenome = genomeBuilder($mother->getGenome(), $father->getGenome());
-    $MaxHealth = calcHealth($babyGenome());
-    $maxTameness = calcTameness($babyGenome());
-    $babyImage = punnet($babyGenome);
-    $baby = new Pet("Unnamed", $sex, $mother, $father, 0, 0, $babyGenome, 10, $maxHealth, $maxHealth, $maxTameness, $tameness, $babyImage, $str, $agi, $int, $spd, $con, $height, $weight);
+    $phenotype = punnet($babyGenome);
+    if($phenotype[8] === "Heavy"){
+        $weight = $weight * 1.1;
+    } else if($phenotype[8] === "Greyhound"){
+        $weight = $weight * .9;
+    } else if($phenotype[8] === "Compact"){
+        $height = height * .95;
+    }
+    $health = $babyGenome->calcHealth();
+    $maxTameness = $babyGenome->calcTameness();
+    $baby = new Pet("Unnamed", $sex, $mother, $father, 0, 0, $babyGenome, 10, $maxHealth, $maxHealth, $maxTameness, $maxTameness/4, 'generate', $str, $agi, $int, $spd, $con, $height, $weight);
     
     return $baby;  
 }
@@ -202,15 +209,7 @@ class Breeder {
             return $genome;
     }
     
-    public static function calcHealth($genome){
-        $health;
-        return $health;
-    }
     
-    public static function calcTameness($genome){
-        $tameness;
-        return $tameness;
-    }
     
             
             

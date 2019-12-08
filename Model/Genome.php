@@ -276,6 +276,36 @@ class Genome {
         $this->mutationsFather = $mutationsFather;
     }
 
-
+    public function calcHealth(){
+        $health = 100;
+        return $health;
+    }
+    
+    public function calcTameness(){
+       $tameness = 
+        $this->colorMother->getTameness() +
+        $this->colorFather->getTameness() +
+        $this->eyesMother->getTameness() +
+        $this->eyesFather->getTameness() +
+        $this->earsMother->getTameness() +
+        $this->earsFather->getTameness() +
+        $this->coatMother->getTameness() +
+        $this->coatFather->getTameness() +
+        $this->patternMother->getTameness() +
+        $this->patternFather->getTameness() +
+        $this->markingsMother->getTameness() +
+        $this->markingsFather->getTameness() +
+        $this->tailMother->getTameness() +
+        $this->tailFather->getTameness() +
+        $this->skinMother->getTameness() +
+        $this->skinFather->getTameness() +
+        $this->buildMother->getTameness() +
+        $this->buildFather->getTameness() +
+        $this->beakMother->getTameness() +
+        $this->beakFather->getTameness() +
+        $this->feetMother->getTameness() +
+        $this->feetFather->getTameness();  
+      return $tameness;  
+    }
 
 }

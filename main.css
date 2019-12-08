@@ -33,31 +33,15 @@ body {
 }
 
 header {
-   //font-family: 'Cinzel Decorative', cursive;
     font-family: 'Rye', cursive;
     font-size: 2.5em;
-    //font-family: 'Trade Winds', cursive;
 }
 
 #textLogo {
-    border-radius: 50%;
-    height: 3.5em;
-    width: 3.5em;
-    border: 25px solid var(--tuscan-red);
-    background-color: var(--light-red);
-    color: var(--pale-yellow); 
     float:left;
     position: absolute;
     top: 1%;
     margin-left: 1%;
-    text-align: center;
-}
-
-#eyrieText {
-    margin-right: auto;
-    margin-left: auto;
-    vertical-align: middle;
-    margin-top: 1.15em;
 }
 
 section{
@@ -75,8 +59,8 @@ nav ul {
   margin: 0;
   padding: 0;
   background-color: var(--light-red);
-  margin-top: 4.5em;
-  padding-left: 15%;
+  margin-top: 65px;
+  padding-left: 175px;
 }
 
 nav ul li {

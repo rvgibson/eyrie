@@ -8,13 +8,13 @@
             ?>
             <div class="card-deck" style="display: inline-block;">
               <div class="card barnGriffDisplay">
+                  <div class="card-img"></div>
                 <div class="card-body"
-                <ul>
-                <li>Name: <?php echo $griff->getName();?></li>
-                <li>Age: <?php echo $griff->getAge();?> </li>
-                <li>Phenotype: <?php echo implode(Breeder::punnet($griff->getGenome()));?></li>
-                <li>EncodeDump: <?php echo var_dump(DAMethods::genome_encode($griff->getGenome())); ?></li>
-                </ul>
+                     <p><a href="index.php?action=griffin&pid=<?php echo $griff->getId(); ?>"><?php echo $griff->getName(); ?></a> <img src="./images/<?php if($griff->getSex() === "F"){echo "female";} else {echo "male";}?>.png" height="10px" width="10px"></p>
+                     <p>Energy: <?php echo $griff->getEnergy(); ?>/10<br/>
+                     Health: <?php echo $griff->getHealth(); ?>/<?php echo $griff->getMaxHealth(); ?><br/>
+                     Hunger: <?php echo $griff->getHunger(); ?>/10<br/>
+                     Tameness: <?php echo $griff->getTameness(); ?>/<?php echo $griff->getMaxTameness(); ?></p>
                 </div>
               </div>
             </div>

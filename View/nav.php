@@ -19,7 +19,7 @@ and open the template in the editor.
     <body>
         <header>
             <div id="textLogo">
-                <div id="eyrieText">EYRIE</div>
+                     <img src="./Images/EyrieTextLogo.png" alt="Eyrie"/>
             </div>
         </header>
         

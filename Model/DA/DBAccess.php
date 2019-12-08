@@ -175,9 +175,72 @@ function get_griff_by_id($id){
                $griffin['con'],
                $griffin['height'],
                $griffin['weight']);
+               $griffin['id']->setHunger($griffin['hunger']);
     }
-    return $griffin;
+    return $griffin['id'];
 }
+
+function get_griffs_by_sex($userid, $sex){
+    
+     global $db;
+    $query = "SELECT * FROM griffins WHERE userid = :userid AND status = 'active' AND sex = :sex";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':userid', $userid);
+    $statement->bindValue(':sex', $sex);
+    $statement->execute();
+    $griffs = $statement->fetchAll();
+    $statement->closeCursor();
+    
+    
+    foreach ($griffs as $griffin){
+       $genomeArray= DAMethods::genome_parse($griffin['genome']);
+       $genome = get_genes($genomeArray);    
+       $list[$griffin['id']] = new Pet(
+               $griffin['id'],
+               $griffin['name'],
+               $griffin['sex'],
+               $griffin['mother'],
+               $griffin['father'],
+               $griffin['age'],
+               $griffin['breed'],
+               $genome,
+               $griffin['energy'],
+               $griffin['maxHealth'],
+               $griffin['health'],
+               $griffin['maxTameness'],
+               $griffin['tameness'],
+               $griffin['imagepath'],
+               $griffin['str'],
+               $griffin['agi'],
+               $griffin['intl'],
+               $griffin['spd'],
+               $griffin['con'],
+               $griffin['height'],
+               $griffin['weight']);
+    }
+    return $list;
+}
+
+function feed($userid, $griffid){
+    global $db;
+    $query = "UPDATE griffins WHERE userid = :userid AND id = :griffid SET hunger = hunger + 1";
+    $statement->bindValue(':userid', $userid);
+    $statement->bindValue(':griffid', $griffid);
+    $statement->execute();
+    $statement->closeCursor();
+    
+}
+
+function medicine($userid, $griffid, $medValue){
+        global $db;
+    $query = "UPDATE griffins WHERE userid = :userid AND id = :griffid SET health = health + :med";
+    $statement->bindValue(':userid', $userid);
+    $statement->bindValue(':griffid', $griffid);
+    $statement->bindValue(':med', $medValue);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 
 
 

@@ -32,7 +32,9 @@ class Pet {
             $spd,
             $con,
             $height,
-            $weight;
+            $weight,
+            $hunger;
+    
     
     public function __construct($id, $name, $sex, $mother, $father, $age, $breedTimer, $genome, $energy, $maxHealth, $health, $maxTameness, $tameness, $imagePath, $str, $agi, $int, $spd, $con, $height, $weight) {
         $this->id = $id;
@@ -226,7 +228,13 @@ class Pet {
         $this->weight = $weight;
     }
 
+    function getHunger() {
+        return $this->hunger;
+    }
 
+    function setHunger($hunger) {
+        $this->hunger = $hunger;
+    }
 
 }
 
