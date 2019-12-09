@@ -65,7 +65,7 @@ section{
 
 #stats_tame, #stats_health, #stats_hunger {
     display: inline-block;
-    width: 30%;
+    width: 25%;
     text-align: center;
 }
 

@@ -14,8 +14,8 @@ class Breeder {
     }else {
         $sex = "M";
     }
-    $height = round(((rand(min($mother->getHeight(), $father->getHeight()),max($mother->getHeight(), $father->getHeight())))/7));
-    $weight = round(((rand(min($mother->getWeight(), $father->getWeight()), max($mother->getWeight(), $father->getWeight())))/7));
+    $height = round(((rand(min($mother->getHeight(), $father->getHeight()),max($mother->getHeight(), $father->getHeight())))/4));
+    $weight = round(((rand(min($mother->getWeight(), $father->getWeight()), max($mother->getWeight(), $father->getWeight())))/10));
     $str = (rand(min($mother->getStr(), $father->getStr()), max($mother->getStr(), $father->getStr())));
     $agi = (rand(min($mother->getAgi(), $father->getAgi()), max($mother->getAgi(), $father->getAgi())));
     $spd = (rand(min($mother->getSpd(), $father->getSpd()), max($mother->getSpd(), $father->getSpd())));

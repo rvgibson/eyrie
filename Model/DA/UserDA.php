@@ -75,9 +75,9 @@ function add_new_user($username, $email, $password){
     $statement->bindValue(':password', $password);
 }
 
-function get_player_password($userid){}
-
-function check_registration($email_address){}
+function get_user_password($userid){
+    
+}
 
 function get_user_by_griffin($griffinID){
     global $db;
@@ -93,5 +93,36 @@ function get_user_by_griffin($griffinID){
     }
     return $userID;
 }
+
+function check_username($userName) {
+    global $db;
+    $query = "SELECT UserName FROM users WHERE UserName=:userPlaceholder";
+    $statement = $db->prepare($query);
+    $statement->bindValue('userPlaceholder', $userName);
+    $statement->execute();
+    $userresults = $statement->fetchAll();
+    $statement->closeCursor();
+    if (count($userresults) > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function check_email($email) {
+    global $db;
+    $query = "SELECT email FROM users WHERE email=:emailPlaceholder";
+    $statement = $db->prepare($query);
+    $statement->bindValue('emailPlaceholder', $email);
+    $statement->execute();
+    $emailresults = $statement->fetchAll();
+    $statement->closeCursor();
+    if (count($emailresults) > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+?>
 
 

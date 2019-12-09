@@ -4,7 +4,7 @@
        include_once('./Model/Breeder.php');
        require_once('./View/nav.php'); ?>
 <section>
-    
+    <?php echo $message; ?>
 </section>
     </body>
 </html>

@@ -7,6 +7,7 @@ require_once('Model/Genome.php');
 require_once('Model/Pet.php');
 require_once('Model/User.php');
 require_once('Model/Breeder.php');
+require_once ('Model/loginManager.php');
 require_once('vendor/autoload.php');
 use Invervention\Image\ImageManager;
 
@@ -17,8 +18,11 @@ if($action == NULL){
         $action = 'main';
     }
 }
-
-$_SESSION['user'] = get_user_by_id(1);
+session_start();
+if(!isset($_SESSION['user'])){
+    $_SESSION['user']=NULL;
+}
+$_SESSION['loginattempts'] = 0;
 
 switch ($action) {
     
@@ -39,65 +43,92 @@ switch ($action) {
         $username = htmlspecialchars(filter_input(INPUT_POST, 'username'));
         //get the password
         $password = filter_input(INPUT_POST, 'password');
+        $user = get_user($username);
+        $checkPassword = get_user_password($user['id']);
+        
+        if(!password_verify($password, $checkPassword)){
+            //passwords don't match - return login error
+            if($_SESSION['loginattempts'] >= 5){
+            $loginMessage = "Too many login attempts. Please try again later or contact an administrator for help with your account at support@pidraws.com";
+            }
+            else{
+            $loginMessage = "Incorrect username and/or password. Please try again";
+            $_SESSION['loginattempts']++;
+            }
+        }
+        else{
+                $_SESSION['user'] = $user;
+                include('./index.php?action=main');
+           }
         break;
     
     case 'register':
+        $regError = '';
         include('./View/register.php');
         break;
     
     case 'submit_registration':
         //get data from the form
         $username = htmlspecialchars(trim(filter_input(INPUT_POST, 'username')));
-        $first_name = htmlspecialchars(trim(filter_input(INPUT_POST, 'first_name')));
-        $last_name = htmlspecialchars(trim(filter_input(INPUT_POST, 'last_name')));
-        $email_address = htmlspecialchars(trim(filter_input(INPUT_POST, 'email_address')));
-        $password = filter_input(INPUT_POST, 'password');
-        $invite_code = trim(filter_input(INPUT_POST, 'invite_code'));
+        $email = htmlspecialchars(trim(filter_input(INPUT_POST, 'email_address')));
+        $password = filter_input(INPUT_POST, 'password');     
 
-        //send data to the Register model
-        Register::process_registration($username, $first_name, $last_name, $email_address, $password, $invite_code, $mail);
-        die;
+        //validate and verify registration
+        $regError = validate_reg($username, $password, $email);
+        if($regError === ''){
+            register_user($username, $password, $email);
+            $message = 'Thank you for registering!';
+            include('./View/loginconfirm.php');
+        }
+        else {
+            include('/View/register.php');
+        }
         break;
-    case 'confirm_registration':
-        //get the username
-        $username = htmlspecialchars(filter_input(INPUT_POST, 'username'));
-        //get the confirmation security code
-        $security_code = htmlspecialchars(filter_input(INPUT_POST, 'confirmation_code'));
-        //send data to the Register model
-        Register::confirm_registration($username, $security_code);
-        die;
-        break;
-    
+
     case 'logout':
         $_SESSION['user'] = NULL;
         include('./View/home.php');
         break;
     
     case 'barn':
+        $logintoken = false;
         $userID = filter_input(INPUT_GET, 'utarget');
         $griffinsList = get_griffs_active($userID);
+        if($userID === $_SESSION['user']->getId()){
+        $logintoken = true;}
         include('./View/barn.php');
         break;
     
     case 'profile':
-        $userID = filter_input(INPUT_GET, 'user');
+        $logintoken = false;
+        $userID = filter_input(INPUT_GET, 'utarget');
+        if($userID === $_SESSION['user']->getId()){
+        $logintoken = true;}
         include('./View/profile.php');
         break;
     
     case 'griffin':
+        $logintoken = false;
         $griffID = filter_input(INPUT_GET, 'pid');
         $griff = get_griff_by_id($griffID);
+         $ageDays=(time()-strtotime($griff->getAge()))/86400;
+            if ($ageDays >= 30){
+                puberty($griff); 
+            }
         $owner = get_user_by_griffin($griffID);
+        if($owner === $_SESSION['user']->getId()){
+        $logintoken = true;}
         $barn = get_griffs_active($owner);
         include('./View/griff.php');
         break;
    
     //Go to Breeding page and get list of viable pets
     case 'breeder':
+        $logintoken = false;
         $mother = NULL;
         $father = NULL;
         $griffSelected = filter_input(INPUT_POST, 'griffID');
-        $griff= get_griff_by_id($griffSelected);
+        $griff=get_griff_by_id($griffSelected);
         if ($griff->getSex() === "F"){
             $mother = $griff;
         } else if($griff->getSex() === "M"){
@@ -111,18 +142,21 @@ switch ($action) {
         }
         $femaleList = get_griffs_by_sex($_SESSION['user']->getId(), 'F');
         $maleList = get_griffs_by_sex($_SESSION['user']->getId(), 'M');
-        $fBreedable = [];
-        $mBreedable = [];
+        $fBreedable = array();
+        $mBreedable = array();
         foreach ($femaleList as $griff){
-            if ((time()- strtotime($griff->getAge()))/86400 >= 30 && (time()- strtotime($griff->getBreedTimer()))/86400 >= 14){
+            $ageDays=(time()-strtotime($griff->getAge()))/86400;
+            if ($ageDays >= 30){
                 array_push($fBreedable, $griff); 
             }
         }
         foreach ($maleList as $griff){
-            if ((time()- strtotime($griff->getAge()))/86400 >= 30 && (time()- strtotime($griff->getBreedTimer()))/86400 >= 14){
+            $ageDays=(time()-strtotime($griff->getAge()))/86400;
+            if ($ageDays >= 30){
                 array_push($mBreedable, $griff); 
             }
         }
+        
         include('./View/breed.php');
         break;
     

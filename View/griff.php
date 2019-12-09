@@ -26,7 +26,7 @@
                        Intelligence: <?php echo $griff->getInt(); ?>
                        </div>
                        <div>
-                       Age: <?php $ageDays=(time()- strtotime($griff->getAge()))/86400;
+                       Age: <?php $ageDays=(time()-strtotime($griff->getAge()))/86400;
                                if($ageDays <= 1 ){
                                    $age = '1 Day';
                                } else if ($ageDays > 1 && $ageDays <= 6){
@@ -60,24 +60,24 @@
                    <div class="griff-pheno page-stats m-1">
                        
                        <?php $phenotype = Breeder::punnet($griff->getGenome()); ?>
-                       <table class="table">
+                       <table class="table table-sm">
                            <tr>
-                            <td>Color</td><td><?php echo $phenotype[0]; ?></td> <td>Skin</td><td><?php echo $phenotype[7]; ?></td>
+                            <td>Color:</td><td><?php echo $phenotype[0]; ?></td> <td>Skin:</td><td><?php echo $phenotype[7]; ?></td>
                         </tr>
                         <tr>
-                            <td>Eyes</td><td><?php echo $phenotype[1]; ?></td> <td>Build</td><td><?php echo $phenotype[8]; ?></td>
+                            <td>Eyes:</td><td><?php echo $phenotype[1]; ?></td> <td>Build:</td><td><?php echo $phenotype[8]; ?></td>
                         </tr>
                         <tr>
-                            <td>Ears</td><td><?php echo $phenotype[2]; ?></td> <td>Beak</td><td><?php echo $phenotype[9]; ?></td>
+                            <td>Ears:</td><td><?php echo $phenotype[2]; ?></td> <td>Beak:</td><td><?php echo $phenotype[9]; ?></td>
                         </tr>
                         <tr>
-                            <td>Coat</td><td><?php echo $phenotype[3]; ?></td> <td>Feet</td><td><?php echo $phenotype[10]; ?></td>
+                            <td>Coat:</td><td><?php echo $phenotype[3]; ?></td> <td>Feet:</td><td><?php echo $phenotype[10]; ?></td>
                         </tr>
                         <tr>
-                            <td>Pattern</td><td><?php echo $phenotype[4]; ?></td> <td>Tail</td><td><?php echo $phenotype[6]; ?></td> 
+                            <td>Pattern:</td><td><?php echo $phenotype[4]; ?></td> <td>Tail:</td><td><?php echo $phenotype[6]; ?></td> 
                         </tr>
                         <tr>
-                            <td>Markings</td><td><?php echo $phenotype[5]; ?></td> 
+                            <td>Markings:</td><td><?php echo $phenotype[5]; ?></td> 
                         </tr>
                        </table>
                    </div>
@@ -86,38 +86,41 @@
                         <div id="stats_tame">
                            <span class="font-weight-bold">Tameness</span> <br/>
                            <?php echo $griff->getTameness() . '/' . $griff->getMaxTameness(); ?>
+                           <?php if($logintoken){?>
                            <p>
                                <input type="submit" class="btn btn-primary" value="Train" form="trainForm">
-                           </p>
+                           </p><?php } ?>
                         </div>
                        <div id="stats_hunger" >
                            <span class="font-weight-bold">Hunger</span><br/>
                             <?php echo $griff->getTameness();?>/10
+                            <?php if($logintoken) {?>
                              <p>
                                <input type="submit" class="btn btn-primary" value="Feed" form="feedForm">
                            </p>
+                            <?php }?>
                        </div>
                        <div id="stats_health" >
                            <span class="font-weight-bold">Health</span><br/>
                             <?php echo $griff->getHealth() . '/' . $griff->getMaxHealth(); ?>
+                           <?php if($logintoken){ ?>
                             <p>
                                <input type="submit" class="btn btn-primary" value="Medicate" form="medicineForm">
                            </p>
+                           <?php } ?>
                        </div>
-                       
-                   </div>
-                   <div class="row m-1">
-                       <div class="col-6 page-stats" id="stats_energy">
-                           <span class="font-weight-bold">Energy</span><br/>
+                           <div id="stats_energy">
+                                <span class="font-weight-bold">Energy</span><br/>
                             <?php echo $griff->getEnergy()?>/10
-                       </div>
-                 
-                        <div class="col-6 page-stats" id="stats_energy">
-                            <form id="pedigree" method="POST" action="./index.php">
-                                <input type="hidden" name="action" value="pedigree">
-                                <input type="hidden" name="griffin" value="<?php echo $griff->getId(); ?>">
-                                <input type="submit" name="Pedigree" value="Pedigree" class="btn btn-primary">
-                            </form>
+                           </div>
+                   </div>
+
+                        <div class="col-12 page-stats">
+                          <input form="pedigree" type="submit" name="Pedigree" value="Pedigree" class="btn btn-primary">
+                          <?php if($logintoken){ ?>
+                          <input form="breed" type="submit" name="Breed" value="Breed" class="btn btn-primary">
+                          <input form="pasture" type="submit" name="Pasture" value="Pasture" class="btn btn-primary">
+                          <?php } ?>
                        </div>
                    </div>
                </div>
@@ -137,6 +140,20 @@
                <input type="hidden" name="action" value="train">
                <input type="hidden" name="griffID" value="<?php echo $griff->getId();?>">
            </form> 
+           <form id="pedigree" method="POST" action="./index.php">
+                <input type="hidden" name="action" value="pedigree">
+                 <input type="hidden" name="griffin" value="<?php echo $griff->getId(); ?>"> 
+             </form>
+                            
+            <form id="breed" method="POST" action="./index.php">
+                <input type="hidden" name="action" value="breeder">
+                <input type="hidden" name="griffID" value="<?php echo $griff->getId(); ?>">    
+            </form>
+                            
+            <form id="pasture" method="post" action="./index.php">
+                <input type="hidden" name="action" value="pasture">
+                <input type="hidden" name="griffID" value="<?php echo $griff->getId(); ?>">
+            </form>
            
            <div style="display: none;" id="rename-popup">
                <h5>Rename Griffin</h5>

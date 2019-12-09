@@ -335,6 +335,15 @@ function update_image($griffID){
     $statement->closeCursor();
 }
 
+function puberty($griffID){
+    global $db;
+    $query = "UPDATE griffins SET height=height*4, weight=weight*10 WHERE id = :griffid";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':griffid', $griffID);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 
 
 

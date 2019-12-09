@@ -6,13 +6,9 @@
 <section>
     <form method="POST" action="./index.php">
         <label for="username">Username </label>
-            <input type="text" name="username" class="textbox" <?php if (isset($username)) {
-                                                                    echo "value='$username'";
-                                                                } ?>><br>
+            <input type="text" name="username" class="textbox"><br>
             <label for="password">Password </label>
-            <input type="password" name="password" class="textbox" <?php if (isset($password)) {
-                                                                        echo "value='$password'";
-                                                                    } ?>><br>
+            <input type="password" name="password" class="textbox" ><br>
             <input type='hidden' name="action" value="submit_login">
             <br>
             <button type="submit">Login</button>  
