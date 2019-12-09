@@ -28,7 +28,7 @@ class Gene {
         return $this->name;
     }
 
-    public function getTamenessValue() {
+    public function getTameness() {
         return $this->tamenessValue;
     }
 
@@ -36,7 +36,7 @@ class Gene {
         $this->name = $name;
     }
 
-    public function setTamenessValue($tamenessValue) {
+    public function setTameness($tamenessValue) {
         $this->tamenessValue = $tamenessValue;
     }
     public function getDominance() {

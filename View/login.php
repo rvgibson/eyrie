@@ -1,17 +1,24 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
+
         <?php
-        // put your code here
-        ?>
+       include_once('./Model/DA/DAMethods.php');
+       include_once('./Model/Breeder.php');
+       require_once('./View/nav.php'); ?>
+<section>
+    <form method="POST" action="./index.php">
+        <label for="username">Username </label>
+            <input type="text" name="username" class="textbox" <?php if (isset($username)) {
+                                                                    echo "value='$username'";
+                                                                } ?>><br>
+            <label for="password">Password </label>
+            <input type="password" name="password" class="textbox" <?php if (isset($password)) {
+                                                                        echo "value='$password'";
+                                                                    } ?>><br>
+            <input type='hidden' name="action" value="submit_login">
+            <br>
+            <button type="submit">Login</button>  
+    </form>
+    
+    <div><p>Don't have an account? <a href='./index.php?action=register'>Register here.</a></p></div>
+</section>  
     </body>
 </html>

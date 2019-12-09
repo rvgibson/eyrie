@@ -17,15 +17,17 @@ class User {
            $barn, 
            $food,
            $medicine,
-           $money;
+           $money,
+           $role;
     
-   function __construct($id, $username, $barn, $food, $medicine, $money) {
+   function __construct($id, $username, $barn, $food, $medicine, $money, $role) {
        $this->id = $id;
        $this->username = $username;
        $this->barn = $barn;
        $this->food = $food;
        $this->medicine = $medicine;
        $this->money = $money;
+       $this->role = $role;
    }
    
    function getId() {
@@ -74,6 +76,14 @@ class User {
 
    function setMoney($money) {
        $this->money = $money;
+   }
+
+   function getRole() {
+       return $this->role;
+   }
+
+   function setRole($role) {
+       $this->role = $role;
    }
 
 
