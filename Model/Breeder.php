@@ -87,6 +87,70 @@ public static function genomeBuilder($m, $d){
         } 
         return $phenotype;     
     }
+    
+    public static function make_starter_pet($sex){
+        $color = get_genes_by_type('color');
+        $eyes = get_genes_by_type('eyes');
+        $ears = get_genes_by_type('ears');
+        $coat = get_genes_by_type('coat');
+        $pattern = get_genes_by_type('pattern');
+        $markings = get_genes_by_type('marking');
+        $tail = get_genes_by_type('tail');
+        $skin = get_genes_by_type('skin');
+        $build = get_genes_by_type('build');
+        $beak = get_genes_by_type('beak');
+        $feet = get_genes_by_type('feet');
+        $height = rand(90, 200);
+        $weight = rand(130, 350);
+        $str = rand(10, 30);
+        $agi = rand(10, 30);
+        $intl = rand(10,30);
+        $spd = rand(10, 30);
+        $con = rand(10, 30);
+        $age = getdate(time() - (30 * 24 * 60 * 60));
+        $agefmt = $age['year'] .'-'. $age['mon'] .'-'. $age['mday'].' '. $age['hours'].':'.$age['minutes'].':'.$age['seconds'];
+        $breed = $agefmt;
+        
+        //get random genes
+        
+            $colorMother = array_rand($color, 1);
+            $colorFather = array_rand($color, 1);
+            $eyesMother = array_rand($eyes, 1);
+            $eyesFather = array_rand($eyes, 1);
+            $earsMother = array_rand($ears, 1);
+            $earsFather = array_rand($ears, 1);
+            $coatMother = array_rand($coat, 1);
+            $coatFather = array_rand($coat, 1);
+            $patternMother = array_rand($pattern, 1);
+            $patternFather =array_rand($pattern, 1);
+            $markingsMother = array_rand($markings, 1);
+            $markingsFather = array_rand($markings, 1);
+            $tailMother = array_rand($tail, 1);
+            $tailFather = array_rand($tail, 1);
+            $skinMother = array_rand($skin, 1);
+            $skinFather = array_rand($skin, 1);
+            $buildMother = array_rand($build, 1);
+            $buildFather = array_rand($build, 1);
+            $beakMother = array_rand($beak, 1);
+            $beakFather = array_rand($beak, 1);
+            $feetMother = array_rand($feet, 1);
+            $feetFather = array_rand($feet, 1);
+            
+       $genome = new Genome($color[$colorMother], $color[$colorFather],
+               $eyes[$eyesMother], $eyes[$eyesFather],
+               $ears[$earsMother], $ears[$earsFather],
+               $coat[$coatMother], $coat[$coatFather],
+               $pattern[$patternMother], $pattern[$patternFather],
+               $markings[$markingsMother], $markings[$markingsFather],
+               $tail[$tailMother], $tail[$tailFather],
+               $skin[$skinMother], $skin[$skinFather],
+               $build[$buildMother], $build[$buildFather],
+               $beak[$beakMother], $beak[$beakFather],
+               $feet[$feetMother], $feet[$feetFather],
+               new Gene('health', 'W', 0, 0), new Gene('health', 'W', 0, 0), new Gene('mutation', 'W', 0, 0), new Gene('mutation', 'W', 0, 0)); 
+       $griffin = new Pet(NULL, 'Unnamed', $sex, 0, 0, $agefmt, $breed, $genome, 10, 10, 10, $genome->calcTameness(), $genome->calcTameness()/4, 'generate', $str, $agi, $intl, $spd, $con, $height, $weight); 
+       return $griffin;
+    }
 
     public static function imageBuilder($phenotype, $id){
         $saveurl = $id.'.png';

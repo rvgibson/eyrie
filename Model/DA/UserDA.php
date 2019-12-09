@@ -62,7 +62,24 @@ function get_user_by_id($id){
 }
 
 function get_all_users(){
+    global $db;
+    $query = 'SELECT * FROM users';
+    $statement=$db->prepare($query);
+    $statement->execute();
+    $allusers = $statement->fetchAll();
+    $statement->closeCursor();
     
+    foreach($allusers as $user){
+        $users[$user['id']] = new User(
+                $user['id'], 
+            $user['username'], 
+            $user['barn'], 
+            $user['food'], 
+            $user['medicine'], 
+            $user['money'],
+            $user['role']);
+    }
+    return $users;   
 }
 
 function add_new_user($username, $email, $password){
@@ -73,10 +90,24 @@ function add_new_user($username, $email, $password){
     $statement->bindValue(':username', $username);
     $statement->bindValue(':email', $email);
     $statement->bindValue(':password', $password);
+    $statement->execute();
+    $statement->closeCursor();
 }
 
 function get_user_password($userid){
+    global $db;
+    $query = "SELECT password FROM users WHERE id = :userid;";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':userid', $userid);
+    $statement->execute();
+    $data = $statement->fetchAll();
+    $statement -> closeCursor();
     
+    foreach($data as $p){
+        $password = $p['password'];
+    }
+    
+    return $password;
 }
 
 function get_user_by_griffin($griffinID){
@@ -123,6 +154,57 @@ function check_email($email) {
     }
 }
 
+function reset_password($password, $username)
+    {
+        global $db;
+        $query = 'UPDATE users
+                 SET password = :password
+                 WHERE username = :username';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':password', $password);
+        $statement->bindValue(':username', $username);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    function update_food($userid, $food){
+         global $db;
+        $query = 'UPDATE users
+                 SET food = food + :food
+                 WHERE id = :userid';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':food', $food);
+        $statement->bindValue(':userid', $userid);
+        $statement->execute();
+        $statement->closeCursor();
+        
+    }
+    
+    function update_medicine($userid, $medicine){
+         global $db;
+        $query = 'UPDATE users
+                 SET medicine = medicine + :medicine
+                 WHERE id = :userid';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':medicine', $medicine);
+        $statement->bindValue(':userid', $userid);
+        $statement->execute();
+        $statement->closeCursor();
+        
+    }
+    
+    function update_money($userid, $money){
+         global $db;
+        $query = 'UPDATE users
+                 SET money = money + :money
+                 WHERE id = :userid';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':money', $money);
+        $statement->bindValue(':userid', $userid);
+        $statement->execute();
+        $statement->closeCursor();
+        
+    }
 ?>
 
 

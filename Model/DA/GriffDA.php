@@ -104,6 +104,55 @@ function add_griff($griffin, $userid){
     
 }
 
+function add_griff_retroactive($griffin, $userid){
+     $genomeStore = DAMethods::genome_encode($griffin->getGenome());
+    $name = $griffin->getName();
+    $sex = $griffin->getSex();
+    $height = $griffin->getHeight();
+    $weight = $griffin->getWeight();
+    $age = $griffin->getAge();
+    $str = $griffin->getStr();
+    $spd = $griffin->getSpd();
+    $agi = $griffin->getAgi();
+    $intl = $griffin->getInt();
+    $con = $griffin->getCon();
+    $mother = $griffin->getMother();
+    $father = $griffin->getFather();
+    $health = '10';
+    $energy = '10';
+    $MaxTameness = $griffin->getMaxTameness();
+    $tameness = $griffin->getTameness();
+    $status = 'active';
+    $imagepath = 'generate';
+        global $db;
+        $query = "INSERT INTO griffins 
+                (userid, name, sex, genome, height, weight, age, str, intl, spd, agi, con, mother, father, health, energy, maxTameness, tameness, status, imagepath)
+         VALUES (:userid, :name, :sex, :genome, :height, :weight, :age, :str, :intl, :spd, :agi, :con, :mother, :father, :health, :energy, :maxTameness, :tameness, :status, :imagepath);";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':userid', $userid);
+        $statement->bindValue(':name', $name);
+        $statement->bindValue(':sex', $sex);
+        $statement->bindValue(':genome', $genomeStore);
+        $statement->bindValue(':height', $height);
+        $statement->bindValue(':weight', $weight); 
+        $statement->bindValue(':age', $age);
+        $statement->bindValue(':str', $str);
+        $statement->bindValue(':intl', $intl);
+        $statement->bindValue(':spd', $spd);
+        $statement->bindValue(':agi', $agi);
+        $statement->bindValue(':con', $con);
+        $statement->bindValue(':mother', $mother);
+        $statement->bindValue(':health', $health);
+        $statement->bindValue(':father', $father);
+        $statement->bindValue(':energy', $energy);
+        $statement->bindValue(':maxTameness', $MaxTameness);
+        $statement->bindValue(':tameness', $tameness);
+        $statement->bindValue(':status', $status);
+        $statement->bindValue(':imagepath', $imagepath);
+        $statement->execute();
+        $statement->closeCursor();  
+}
+
 function get_genes($genomeArray){
     $g = array();
     global $db;
@@ -335,14 +384,52 @@ function update_image($griffID){
     $statement->closeCursor();
 }
 
-function puberty($griffID){
+function get_offspring($griffID){
     global $db;
-    $query = "UPDATE griffins SET height=height*4, weight=weight*10 WHERE id = :griffid";
+    $query = 'SELECT * FROM griffins WHERE mother = :griffID OR father = :griffID';
     $statement = $db->prepare($query);
-    $statement->bindValue(':griffid', $griffID);
+    $statement->bindValue(':griffID', $griffID);
     $statement->execute();
+    $griffs = $statement->fetchAll();
     $statement->closeCursor();
+    $list = [];
+    foreach ($griffs as $griffin){
+       $genomeArray= DAMethods::genome_parse($griffin['genome']);
+       $genome = get_genes($genomeArray);    
+       $list[$griffin['id']] = new Pet(
+               $griffin['id'],
+               $griffin['name'],
+               $griffin['sex'],
+               $griffin['mother'],
+               $griffin['father'],
+               $griffin['age'],
+               $griffin['breed'],
+               $genome,
+               $griffin['energy'],
+               $griffin['maxHealth'],
+               $griffin['health'],
+               $griffin['maxTameness'],
+               $griffin['tameness'],
+               $griffin['imagepath'],
+               $griffin['str'],
+               $griffin['agi'],
+               $griffin['intl'],
+               $griffin['spd'],
+               $griffin['con'],
+               $griffin['height'],
+               $griffin['weight']);
+    }
+    return $list;
 }
+
+//function puberty($griffID){
+//    global $db;
+//    $query = "UPDATE griffins SET height=height*4, weight=weight*10 WHERE id = :griffid";
+//    $statement = $db->prepare($query);
+//    $statement->bindValue(':griffid', $griffID);
+//    $statement->execute();
+//    $statement->closeCursor();
+//}
 
 
 

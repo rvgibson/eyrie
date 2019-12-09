@@ -32,15 +32,18 @@ require_once('./Model/Breeder.php');
            <nav>
             <ul>
                 <li><a href="?action=main">Home</a></li>
-                <li><a href="?action=<?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){echo 'barn&utarget='.$_SESSION['user']->getId();} else{ echo 'goLogin.php';} ?>">Barn</a></li>
+                <li><a href="?action=<?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){echo 'barn&utarget='.$_SESSION['user']->getId();} else{ echo 'goLogin';} ?>">Barn</a></li>
                 <li><a href="?action=explore">Explore</a></li>
                 <li><a href="?action=market">Shop</a></li>
-                <li><a href="?action=<?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){echo 'profile&utarget='.$_SESSION['user']->getId();} else{ echo 'goLogin.php';} ?>"">Profile</a></li>
-                <li><a href="?action=goLogin"><?php if($_SESSION['user']){
+                <li><a href="?action=<?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){echo 'profile&utarget='.$_SESSION['user']->getId();} else{ echo 'goLogin';} ?>">Profile</a></li>
+                <li><a href="?action=<?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL){
                                                         $loginText = "Logout";
-                                                            }else{$loginText = "Login";}
+                                                        echo 'logout';
+                                                            }else{$loginText = "Login";
+                                                            echo 'goLogin';
+                                                            }?>"><?php
                                                             echo $loginText;?></a></li>
-                <?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL && $_SESSION['user']->getRole() === 'admin'){?><li><a href="?action=makeGriff">Make Test Griff</a></li>
+                <?php if(isset($_SESSION['user']) && $_SESSION['user'] !== NULL && $_SESSION['user']->getRole() === 'Admin'){?><li><a href="?action=makeGriff">Make Test Griff</a></li>
                 <li><a href="?action=goAdmin">Admin Portal</a></li>
                 <?php } ?>
             

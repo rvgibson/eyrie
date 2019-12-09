@@ -39,27 +39,22 @@ switch ($action) {
         break;
     
     case 'login':
-        //get the username
-        $username = htmlspecialchars(filter_input(INPUT_POST, 'username'));
-        //get the password
-        $password = filter_input(INPUT_POST, 'password');
+        $username = filter_input(INPUT_POST, 'username');
         $user = get_user($username);
-        $checkPassword = get_user_password($user['id']);
-        
-        if(!password_verify($password, $checkPassword)){
-            //passwords don't match - return login error
-            if($_SESSION['loginattempts'] >= 5){
-            $loginMessage = "Too many login attempts. Please try again later or contact an administrator for help with your account at support@pidraws.com";
-            }
-            else{
-            $loginMessage = "Incorrect username and/or password. Please try again";
-            $_SESSION['loginattempts']++;
-            }
+        $password = filter_input(INPUT_POST, 'password');
+        //retrieve the hashed password from the users table by username
+        $hash_from_db = get_user_password($user->getId());
+        //check the entered password against the hashed password received from the users table
+        if (!password_verify($password, $hash_from_db)) {
+            //password does not match--exit script and redirect to login
+            $login_result = "Incorrect login. Please try again.";
+            include('./View/login.php');
+        } else {
+            $_SESSION['user'] = get_user($username);
+            $_SESSION['turns'] = 20;
+            include('./View/home.php');
         }
-        else{
-                $_SESSION['user'] = $user;
-                include('./index.php?action=main');
-           }
+        die();
         break;
     
     case 'register':
@@ -78,16 +73,31 @@ switch ($action) {
         if($regError === ''){
             register_user($username, $password, $email);
             $message = 'Thank you for registering!';
+            //log user in
+            $_SESSION['user'] = get_user($username);
+            $userid = $_SESSION['user']->getId();
+            //generate random starter pets for new user
+            $m = Breeder::make_starter_pet('M');
+            add_griff_retroactive($m, $userid);
+            $f = Breeder::make_starter_pet('F');
+            add_griff_retroactive($f, $userid);
+            
+            $needimage = get_griffs_need_image($userid);
+            foreach ($needimage as $birb){
+                $phenotype = Breeder::punnet($birb->getGenome());
+                Breeder::imageBuilder($phenotype, $birb->getId());
+                update_image($birb->getId());
+            }
             include('./View/loginconfirm.php');
         }
         else {
-            include('/View/register.php');
+            include('./View/register.php');
         }
         break;
 
     case 'logout':
-        $_SESSION['user'] = NULL;
-        include('./View/home.php');
+        session_destroy();
+        header('location:index.php');
         break;
     
     case 'barn':
@@ -112,9 +122,9 @@ switch ($action) {
         $griffID = filter_input(INPUT_GET, 'pid');
         $griff = get_griff_by_id($griffID);
          $ageDays=(time()-strtotime($griff->getAge()))/86400;
-            if ($ageDays >= 30){
-                puberty($griff); 
-            }
+//            if ($ageDays >= 30){
+//                puberty($griff); 
+//            }
         $owner = get_user_by_griffin($griffID);
         if($owner === $_SESSION['user']->getId()){
         $logintoken = true;}
@@ -181,23 +191,36 @@ switch ($action) {
         break;
     
     case 'pedigree':
-        $genCounter = 0;
-        $griffID = filter_input(INPUT_GET, 'griffin');
+        $griffID = filter_input(INPUT_POST, 'griffin');
         $griff = get_griff_by_id($griffID);
         $mother = get_griff_by_id($griff->getMother());
         $father = get_griff_by_id($griff->getFather());
+        $offspring = get_offspring($griffID);
+        if ($mother !== NULL){
         $matGrandmother = get_griff_by_id($mother->getMother());
+            if($matGrandmother !== NULL){
+               $matGGrandmother1 = get_griff_by_id($matGrandmother->getMother());
+                $matGGrandfather1 = get_griff_by_id($matGrandmother->getFather());
+            }
         $matGrandfather = get_griff_by_id($mother->getFather());
+            if($matGrandfather !== NULL){
+                $matGGrandmother2 = get_griff_by_id($matGrandfather->getMother());
+                $matGGrandfather2 = get_griff_by_id($matGrandfather->getFather()); 
+            }
+        
+        }
+        if($father !== NULL){
         $patGrandmother = get_griff_by_id($father->getMother());
+            if($patGrandmother !== NULL){
+                $patGGrandmother1 = get_griff_by_id($patGrandmother->getMother());
+                $patGGrandfather1 = get_griff_by_id($patGrandmother->getFather());
+            }
         $patGrandfather = get_griff_by_id($father->getFather());
-        $matGGrandmother1 = get_griff_by_id($matGrandmother->getMother());
-        $matGGrandmother2 = get_griff_by_id($matGrandfather->getMother());
-        $matGGrandfather1 = get_griff_by_id($matGrandmother->getFather());
-        $matGGrandfather2 = get_griff_by_id($matGrandfather->getFather());
-        $patGGrandmother1 = get_griff_by_id($patGrandmother->getMother());
-        $patGGrandmother2 = get_griff_by_id($patGrandfather->getMother());
-        $patGGrandfather1 = get_griff_by_id($patGrandmother->getFather());
-        $patGGrandfather2 = get_griff_by_id($patGrandfather->getFather());
+            if($patGrandfather !== NULL){
+               $patGGrandmother2 = get_griff_by_id($patGrandfather->getMother());
+               $patGGrandfather2 = get_griff_by_id($patGrandfather->getFather()); 
+            }
+        } 
         break;
     
     case 'feedAll':
@@ -244,6 +267,59 @@ switch ($action) {
         header('location:index.php?action=barn&utarget=' . $_SESSION['user']->getId());
         break;
     
+    case 'explore':
+        $message = '';
+        include('./View/explore.php');
+        
+        break;
+    
+    case 'gather':
+        $random = random_int(0, 100);
+        if($random < 30){
+            $message = "You didn't find anything.";
+        }else if($random >= 30 && $random <=80){
+            $food = random_int(1, 3);
+            $message = "You found " . $food . " food!"; 
+            update_food($_SESSION['user']->getId(), $food);
+        }else if($random > 80 && $random < 85){
+            $message = "You found 1 medicine!";
+            update_medicine($_SESSION['user']->getId(), 1);
+        }else if($random >=85){
+            $money = random_int(1, 50);
+            $message = "You found " .$money. " money!";
+            update_money($_SESSION['user']->getId(), $money);
+        }
+        include('./View/explore.php');
+        break;
+    
+    case 'trap':
+        $random = random_int(0,100);
+        if($random >= 72){
+            $message = "You found a wild griffin!";
+            $s = random_int(1, 2);
+            if ($s === 1){
+                $sex = 'F';
+            }
+            else {
+                $sex = 'M'; 
+            }
+            $wildGriff = Breeder::make_starter_pet($sex);
+            $wildGriffPassable = json_encode($wildGriff);
+            $phenotype = Breeder::punnet($wildGriff->getGenome());
+            Breeder::imageBuilder($phenotype, "wild");
+            $WildImg = "./Model/griffin_images/g_wild.png";
+        }
+        else {
+            $message = "You didn't find any griffins.";
+        }
+        include('./View/explore.php');
+        break;
+        
+    case 'keep':
+        $griffEncoded = $_POST["griff"];
+        $griffin = json_decode($griffEncoded);
+        include('./View/explore.php');
+        break;
     case 'market':
         include('./View/shop.php');
         break;
@@ -315,7 +391,7 @@ switch ($action) {
             $maxTameness = $testGenome->calcTameness();
             $tameness = round($maxTameness/5);
             $testGriff = new Pet(NULL, $name, $sex, $mother, $father, NULL, NULL, $testGenome, 10, 10, 10, $maxTameness, (int) $tameness, 'generate', $str, $agi, $intl, $spd, $con, $height, $weight);
-            add_griff($testGriff, '1');
+            add_griff($testGriff, $_SESSION['user']->getId());
  
            $needimage = get_griffs_need_image($_SESSION['user']->getID());
         foreach ($needimage as $birb){
@@ -326,5 +402,10 @@ switch ($action) {
         $griffinsList = get_griffs_active($_SESSION['user']->getID());
         header('location:index.php?action=barn&utarget='.$_SESSION['user']->getId());
         break;
+       
+        case 'test':
+            $test = Breeder::make_starter_pet(1, "F");
+            var_dump($test);
+            break;
 }
 ?>
